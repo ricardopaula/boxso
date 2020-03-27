@@ -1,0 +1,21 @@
+
+
+npx knex migrate:make create_xxx
+
+npx knex migrate:latest
+npx knex migrate:rollback
+npx knex migrate:status
+
+
+Parametros:
+
+Query: request.query
+
+Route: request.params
+
+Body: request.body
+
+
+
+
+http://knexjs.org/#Installation-migrations

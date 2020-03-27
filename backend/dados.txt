@@ -1,0 +1,35 @@
+  {
+    "ownername": "Joao Silva",
+    "fantasyname": "Mercado do João ",
+    "cpfcnpj": "19.100.092-0001-23",
+    "email": "casa@joao.com.br",
+    "password": "123",
+    "address": "R. Brasil",
+    "addressnumber": "409",
+    "neighborhood": "SL 233",
+    "city": "São José dos Campos",
+    "uf": "SP",
+    "phone": "12 3444-5483",
+    "cell": "12 98188-0029",
+    "bank": "",
+    "ag": "",
+    "cc": ""
+  }
+
+  {
+    "ownername": "Maria Santos",
+    "fantasyname": "Açougue da Maria ",
+    "cpfcnpj": "34.563.234-0001-21",
+    "email": "acougue@maria.com.br",
+    "password": "456",
+    "address": "R. Itália",
+    "addressnumber": "1298",
+    "neighborhood": "Terreo3",
+    "city": "Taubaté",
+    "uf": "SP",
+    "phone": "12 3344-1223",
+    "cell": "12 99837-2356",
+    "bank": "",
+    "ag": "",
+    "cc": ""
+  }
