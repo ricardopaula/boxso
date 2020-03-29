@@ -23,7 +23,7 @@ exports.up = function(knex) {
       table.string('apikey');
       table.string('apiid');
 
-      table.string('active').notNullable();
+      table.boolean('active').notNullable();
     });
 };
 

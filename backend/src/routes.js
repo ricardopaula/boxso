@@ -8,10 +8,19 @@ const Blockchain = require('./services/Blockchain');
 const routes = express.Router();
 
 routes.get('/shopkeepers', ShopkeeperController.index);
+routes.get('/shopkeepers/check-credentials', ShopkeeperController.check_credentials);
+routes.get('/shopkeepers/show/:uuid', ShopkeeperController.list);
+
+
 routes.post('/shopkeepers', ShopkeeperController.create);
 
+routes.put('/shopkeepers/:uuid', ShopkeeperController.update);
+
 routes.get('/orders', OrderController.index);
+routes.get('/orders/show/:uuid', OrderController.list);
+routes.get('/orders/shopkeepers/:uuid', OrderController.list_shopkeeper);
 routes.get('/orders/:uuid/status', OrderController.checkStatus);
+
 routes.post('/orders', OrderController.create);
 
 

@@ -5,7 +5,7 @@ module.exports = {
   async index(request, response) {
     const { page = 1 } = request.query;
 
-    const [count] = await connection('orders').count();
+    const [total] = await connection('orders').count();
 
     const orders = await connection('orders')
       .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
@@ -16,7 +16,40 @@ module.exports = {
         'shopkeepers.fantasyname'
       ]);
 
-    response.header('X-Total-Count', count['count(*)']);
+    response.header('X-Total-Count', total.count);
+    return response.json(orders);
+  },
+
+  async list(request, response) {
+    const { uuid } = request.params;
+
+    const orders = await connection('orders')
+      .where('uuid', uuid)
+      .select(['*'])
+      .first();
+
+    return response.json(orders);
+  },
+
+  async list_shopkeeper(request, response) {
+    const { uuid } = request.params;
+
+    const { page = 1 } = request.query;
+    const [total] = await connection('orders')
+      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
+      .where('shopkeepers.uuid', uuid)
+      .count();
+
+    const orders = await connection('orders')
+      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
+      .where('shopkeepers.uuid', uuid)
+      .limit(5)
+      .offset((page - 1) * 5)
+      .select([
+        'orders.*'
+      ]);
+
+    response.header('X-Total-Count', total.count);
     return response.json(orders);
   },
 
