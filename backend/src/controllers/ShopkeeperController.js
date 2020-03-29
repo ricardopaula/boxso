@@ -1,4 +1,5 @@
 const connection = require('../database/connection');
+const crypto = require('crypto');
 
 module.exports = {
 
@@ -27,8 +28,10 @@ module.exports = {
       cc
     } = request.body;
 
+    const uuid = crypto.randomBytes(10).toString('HEX');
     const active = 'true';
-    const apikey = 'abc123';
+    const apikey = crypto.randomBytes(16).toString('HEX');
+    const apiid = crypto.randomBytes(16).toString('HEX');
 
     await connection('shopkeepers').insert({
       ownername,
@@ -46,6 +49,9 @@ module.exports = {
       bank,
       ag,
       cc,
+
+      uuid,
+      apiid,
       apikey,
       active
     });

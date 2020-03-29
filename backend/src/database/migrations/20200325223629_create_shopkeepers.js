@@ -2,6 +2,8 @@
 exports.up = function(knex) {
     return knex.schema.createTable('shopkeepers', function (table){
       table.increments().primary();
+      table.string('uuid').notNullable();
+
       table.string('ownername').notNullable();
       table.string('fantasyname').notNullable();
       table.string('cpfcnpj').notNullable();
@@ -19,6 +21,8 @@ exports.up = function(knex) {
       table.string('cc');
 
       table.string('apikey');
+      table.string('apiid');
+
       table.string('active').notNullable();
     });
 };

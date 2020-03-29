@@ -5,7 +5,7 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'boxso_web3',
+      database: 'boxso',
       user:     'postgres',
       password: 'postgres'
     },
