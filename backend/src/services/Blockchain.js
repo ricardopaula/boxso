@@ -1,31 +1,28 @@
 // const axios = require('axios')
 
 // const blockexplorer = require('blockchain.info/blockexplorer').usingNetwork(3)
+const blockexplorer = null
 
 module.exports = {
 
-  async checkTransaction(address){
-    options = null;
-
+  async checkTransaction (address) {
+    const options = null
 
     try {
       // return await blockexplorer.getAddress(address, options)
       return await blockexplorer.getBalance(address, options)
-
     } catch (err) {
-      return err;
+      return err
     }
   },
 
-  async check(request, response) {
-    address = '2MwjcboFNf1dZCV64eiGAFnF6nSZPXW6MsW';
-    options = null;
+  async check (request, response) {
+    const address = '2MwjcboFNf1dZCV64eiGAFnF6nSZPXW6MsW'
+    const options = null
 
-    ret = await blockexplorer.getAddress(address, options)
-    console.log('Retorno:')
-    console.log(ret)
+    const ret = await blockexplorer.getAddress(address, options)
 
-    return response.json(ret);
+    return response.json(ret)
   }
 
 }
