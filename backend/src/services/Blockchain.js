@@ -1,6 +1,6 @@
 // const axios = require('axios')
 
-const blockexplorer = require('blockchain.info/blockexplorer').usingNetwork(3)
+// const blockexplorer = require('blockchain.info/blockexplorer').usingNetwork(3)
 
 module.exports = {
 
