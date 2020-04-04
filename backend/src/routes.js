@@ -3,7 +3,9 @@ const express = require('express')
 const ShopkeeperController = require('./controllers/ShopkeeperController')
 const OrderController = require('./controllers/OrderController')
 
-const Blockchain = require('./services/Blockchain')
+// const Blockchain = require('./services/Blockchain')
+const Exchange = require('./services/Exchange')
+
 
 const routes = express.Router()
 
@@ -25,6 +27,6 @@ routes.post('/orders', OrderController.create)
 // UTILITARIOS
 
 routes.post('/orders/updatestatus', OrderController.updateStatus)
-routes.post('/check', Blockchain.check)
+routes.post('/check', Exchange.check)
 
 module.exports = routes
