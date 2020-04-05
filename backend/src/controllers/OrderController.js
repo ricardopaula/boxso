@@ -1,6 +1,8 @@
 const connection = require('../database/connection')
 const crypto = require('crypto')
 
+const exchange = require('../services/Exchange')
+
 module.exports = {
   async index (request, response) {
     const { page = 1 } = request.query
@@ -8,7 +10,7 @@ module.exports = {
     const [total] = await connection('orders').count()
 
     const orders = await connection('orders')
-      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeperId')
+      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
       .limit(5)
       .offset((page - 1) * 5)
       .select([
@@ -36,12 +38,12 @@ module.exports = {
 
     const { page = 1 } = request.query
     const [total] = await connection('orders')
-      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeperId')
+      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
       .where('shopkeepers.uuid', uuid)
       .count()
 
     const orders = await connection('orders')
-      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeperId')
+      .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
       .where('shopkeepers.uuid', uuid)
       .limit(5)
       .offset((page - 1) * 5)
@@ -61,26 +63,40 @@ module.exports = {
 
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
-    const shopkeeperId = await getShopkeeper(apiid, apikey)
+    const shopkeeper_id = await getShopkeeper(apiid, apikey)
 
-    if (!shopkeeperId) {
-      return response.json({ type: 'INVALID_CREDENTIALS' })
+    if (!shopkeeper_id) {
+      return response.json({
+        error: true,
+        type: 'INVALID_CREDENTIALS' })
     }
 
-    const { btcaddress, btcvalue, btccount } = createOrderInExchange()
+    const {error, type, btcaddress, btcvalue, btccount, nonce } = await createOrderInExchange(brlvalue)
+
+    if (error) {
+      return response.json({
+        error,
+        type
+      })
+    }
+
+    btctx = nonce
 
     await connection('orders').insert({
       brlvalue,
       status,
       uuid,
-      shopkeeperId,
+      shopkeeper_id,
 
       btcaddress,
       btcvalue,
-      btccount
+      btccount,
+      btctx
     })
 
     return response.json({
+      error: false,
+      type: 'ORDER_CREATED',
       uuid: uuid,
       qrcode: `bitcoin:${btcaddress}?amount=${btccount}`,
       btcvalue: btcvalue
@@ -102,43 +118,68 @@ module.exports = {
       return response.json({ type: 'INVALID_CREDENTIALS' })
     }
 
-    const shopkeeperId = shopkeeper.id
+    const shopkeeper_id = shopkeeper.id
 
-    const status = await connection('orders')
+    const order = await connection('orders')
       .where('uuid', uuid)
-      .where('shopkeeperId', shopkeeperId)
-      .select('status')
+      .where('shopkeeper_id', shopkeeper_id)
+      .select('btctx')
       .first()
 
-    if (!status) {
+    if (!order) {
       return response.json({ type: 'ORDER_NOT_FOUND' })
     }
 
-    return response.json(status)
+    let transactionStatus = ''
+    const { error, status } = await exchange.checkDeposit(order.btctx)
+
+    if (error) {
+      return response.json({
+        error: true,
+        type: 'ERROR_VERIFY_STATUS',
+        status: false})
+    }
+
+    if(status){
+      transactionStatus = 'confirmed'
+    }else{
+      transactionStatus = 'pending'
+    }
+
+    await module.exports.updateStatus(order.btctx, transactionStatus)
+
+    return response.json({
+      error: false,
+      type: 'VERIFY_STATUS_OK',
+      status: status
+    })
   },
 
   // UTILITARIOS
-  async updateStatus (request, response) {
-    const { uuid } = request.body
-    const btctx = crypto.randomBytes(10).toString('HEX')
+  async updateStatus (btctx, status) {
 
+    console.log(btctx)
     await connection('orders')
-      .update('status', 'confirmed')
-      .update('btctx', btctx)
-      .where('uuid', uuid)
+      .update('status', status)
+      .where('btctx', btctx)
 
-    return response.json({ ok: 'ok' })
+    return { ok: 'ok' }
   }
 
 }
 
 // Criar order na exchange e retorna o endereço, quantidade de BTC e cotação.
-function createOrderInExchange () {
-  const btcaddress = '1btc' + crypto.randomBytes(10).toString('HEX')
+async function createOrderInExchange (brlvalue) {
+  // const btcaddress = '1btc' + crypto.randomBytes(10).toString('HEX')
   const btcvalue = 31549.98
-  const btccount = 0.002514
+  const btccount = (brlvalue / btcvalue).toFixed(8);
+
+  const { error, type, btcaddress, nonce } = await exchange.makeDeposit(btccount)
 
   return {
+    error: error,
+    type: type,
+    nonce, nonce,
     btcaddress: btcaddress,
     btcvalue: btcvalue,
     btccount: btccount
