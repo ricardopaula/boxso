@@ -52,7 +52,7 @@ module.exports = {
         }
       });
 
-    const { error, type, btcaddress } = await checkDeposit(nonce)
+    const { error, type, btcaddress } = await module.exports.checkDeposit(nonce)
 
     return { error, type, btcaddress, nonce }
   },
@@ -80,12 +80,12 @@ module.exports = {
         }
       });
 
-      // respData = {
-      //   error: false,
-      //   type: 'ADDRESS_CREATED',
-      //   btcaddress: 'btc123456789abc',
-      //   status: true
-      // }
+      respData = {
+        error: false,
+        type: 'ADDRESS_CREATED',
+        btcaddress: 'btc123456789abc',
+        status: true
+      }
 
     return respData
   }

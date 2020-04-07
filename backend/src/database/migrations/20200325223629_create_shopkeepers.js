@@ -23,6 +23,7 @@ exports.up = function (knex) {
     table.string('apikey')
     table.string('apiid')
 
+    table.boolean('admin').notNullable()
     table.boolean('active').notNullable()
   })
 }

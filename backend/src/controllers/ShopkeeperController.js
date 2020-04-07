@@ -44,6 +44,8 @@ module.exports = {
 
     const uuid = crypto.randomBytes(10).toString('HEX')
     const active = true
+    const admin = false
+
     const apikey = crypto.randomBytes(16).toString('HEX')
     const apiid = crypto.randomBytes(16).toString('HEX')
 
@@ -67,6 +69,7 @@ module.exports = {
       uuid,
       apiid,
       apikey,
+      admin,
       active
     })
 
@@ -91,6 +94,7 @@ module.exports = {
       bank,
       ag,
       cc,
+      admin,
       active
     } = request.body
 
@@ -112,6 +116,7 @@ module.exports = {
         bank,
         ag,
         cc,
+        admin,
         active
       })
       .returning('id')

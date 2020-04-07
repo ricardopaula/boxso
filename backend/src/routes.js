@@ -2,12 +2,15 @@ const express = require('express')
 
 const ShopkeeperController = require('./controllers/ShopkeeperController')
 const OrderController = require('./controllers/OrderController')
+const SessionController = require('./controllers/SessionController')
 
 // const Blockchain = require('./services/Blockchain')
 const Exchange = require('./services/Exchange')
 
 
 const routes = express.Router()
+
+routes.post('/sessions', SessionController.login)
 
 routes.get('/shopkeepers', ShopkeeperController.index)
 routes.get('/shopkeepers/check-credentials', ShopkeeperController.check_credentials)
