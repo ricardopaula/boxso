@@ -46,6 +46,9 @@ export default function Home (){
             <strong>Status:</strong>
             <p>{order.status}</p>
 
+            <strong>Data:</strong>
+            <p>{order.created_at}</p>
+
           </li>
         ))}
       </ul>

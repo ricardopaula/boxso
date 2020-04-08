@@ -52,7 +52,7 @@
 }
 
 .admin-container ul li{
-  background: #fff;
+  background: rgba(89, 95, 225, 5%);
   padding: 24px;
   border-radius: 8px;
   position: relative;

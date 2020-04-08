@@ -59,7 +59,7 @@ export default function Profile (){
     <div className="new-shopkeeper-container">
     <div className="content">
       <section>
-        <h1>Cadastrr novo lojista</h1>
+        <h1>Cadastrar novo lojista</h1>
 
         <Link className="back-link" to="/admin">
           <FiArrowLeft size={16} color="#e02041"/>
