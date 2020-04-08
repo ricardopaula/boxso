@@ -171,18 +171,29 @@ module.exports = {
 // Criar order na exchange e retorna o endereço, quantidade de BTC e cotação.
 async function createOrderInExchange (brlvalue) {
   // const btcaddress = '1btc' + crypto.randomBytes(10).toString('HEX')
-  const btcvalue = 31549.98
-  const btccount = (brlvalue / btcvalue).toFixed(8);
 
-  const { error, type, btcaddress, nonce } = await exchange.makeDeposit(btccount)
+  const resp = await exchange.getBTCValue();
 
-  return {
-    error: error,
-    type: type,
-    nonce, nonce,
-    btcaddress: btcaddress,
-    btcvalue: btcvalue,
-    btccount: btccount
+  if (resp.error){
+    return {
+      error: true,
+      type: 'EXCHANGE_BTCVALUE_ERROR'
+    }
+  }else{
+    const btcvalue = resp.btcvalue
+    const btccount = (brlvalue / btcvalue).toFixed(8);
+
+    console.log(btcvalue)
+    const { error, type, btcaddress, nonce } = await exchange.makeDeposit(btccount)
+
+    return {
+      error: error,
+      type: type,
+      nonce: nonce,
+      btcaddress: btcaddress,
+      btcvalue: btcvalue,
+      btccount: btccount
+    }
   }
 }
 

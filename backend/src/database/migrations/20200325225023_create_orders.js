@@ -14,6 +14,8 @@ exports.up = function (knex) {
 
     table.integer('shopkeeper_id').notNullable()
     table.foreign('shopkeeper_id').references('id').inTable('shopkeepers')
+
+    table.timestamps(false, true);
   })
 }
 

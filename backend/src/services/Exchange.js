@@ -88,7 +88,30 @@ module.exports = {
       }
 
     return respData
-  }
+  },
 
+  async getBTCValue(){
+    const url = 'https://s3.amazonaws.com/data-production-walltime-info/production/dynamic/walltime-info.json?now=1528962473468.679.0000000000873'
+
+    let respData = {}
+
+    await axios.get(url)
+      .then(response => {
+        respData = {
+          error: false,
+          type: 'EXCHANGE_BTC_VALUE',
+          btcvalue: response.data.BRL_XBT.last_inexact
+        }
+      })
+      .catch(error => {
+        respData =  {
+          error: true,
+          type: 'EXCHANGE_ERROR',
+          btcvalue: ''
+        }
+      });
+
+    return respData
+  }
 
 }

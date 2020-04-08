@@ -25,6 +25,8 @@ exports.up = function (knex) {
 
     table.boolean('admin').notNullable()
     table.boolean('active').notNullable()
+
+    table.timestamps(false, true);
   })
 }
 
