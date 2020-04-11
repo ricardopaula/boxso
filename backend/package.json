@@ -11,11 +11,15 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
+    "bitcoinjs-lib": "^3.3.2",
+    "bitcoinjs-message": "^2.0.0",
+    "bitcore-lib": "^8.17.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "knex": "^0.20.13",
     "pg": "^7.18.2",
-    "sqlite3": "^4.1.1"
+    "sqlite3": "^4.1.1",
+    "walltime-cli": "^1.2.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.2"

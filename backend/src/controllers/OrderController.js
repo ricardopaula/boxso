@@ -1,6 +1,9 @@
 const connection = require('../database/connection')
 const crypto = require('crypto')
 
+const bitcore = require('bitcore-lib');
+const bitcoincore = require('../services/BitcoinCore')
+
 const exchange = require('../services/Exchange')
 
 module.exports = {
@@ -45,8 +48,8 @@ module.exports = {
     const orders = await connection('orders')
       .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
       .where('shopkeepers.uuid', uuid)
-      .limit(5)
-      .offset((page - 1) * 5)
+      .limit(20)
+      .offset((page - 1) * 20)
       .select([
         'orders.*'
       ])
@@ -59,7 +62,7 @@ module.exports = {
     const { brlvalue } = request.body
 
     const status = 'pending'
-    const uuid = crypto.randomBytes(10).toString('HEX')
+    // const uuid = crypto.randomBytes(10).toString('HEX')
 
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
@@ -80,7 +83,7 @@ module.exports = {
       })
     }
 
-    btctx = nonce
+    uuid = nonce
 
     await connection('orders').insert({
       brlvalue,
@@ -90,8 +93,7 @@ module.exports = {
 
       btcaddress,
       btcvalue,
-      btccount,
-      btctx
+      btccount
     })
 
     return response.json({
@@ -158,12 +160,22 @@ module.exports = {
   // UTILITARIOS
   async updateStatus (btctx, status) {
 
-    console.log(btctx)
     await connection('orders')
       .update('status', status)
       .where('btctx', btctx)
 
     return { ok: 'ok' }
+  },
+
+  async teste (request, response){
+
+    const signature = 'H6DEuDsRbPrVykOt1+/oULBPDwPl7D3+uMEsosFgFemLAClw5gvoJNAuESQp0rt7A7wbtuPNWOQQ1CE5ECGbQfs='
+
+    var address = process.env.BTC_PUBLIC_KEY;
+
+    var verified = new bitcore.Message(`{\"nonce\":\"3e828802a0129001766246ad414cf655\",\"version\":\"v1\",\"command\":\"get-account-info\",\"user\":\"5582646a-ab04-c800-0594-6d2d0b28da40\",\"body\":\"{}\"}`).verify(address, signature);
+
+    return response.json({signature: signature, verified: verified})
   }
 
 }
@@ -183,7 +195,6 @@ async function createOrderInExchange (brlvalue) {
     const btcvalue = resp.btcvalue
     const btccount = (brlvalue / btcvalue).toFixed(8);
 
-    console.log(btcvalue)
     const { error, type, btcaddress, nonce } = await exchange.makeDeposit(btccount)
 
     return {

@@ -1,7 +1,11 @@
 const axios = require('axios')
 const crypto = require('crypto')
+const bitcoincore = require('./BitcoinCore')
 
-const blockexplorer = null
+const publicKey = process.env.BTC_PUBLIC_KEY;
+const wtUuid = process.env.WT_UUID;
+
+const queueUrl = 'https://sqs.us-east-1.amazonaws.com/211690707610/walltime-production-api?Action=SendMessage&Version=2011-10-01'
 
 module.exports = {
 
@@ -12,12 +16,8 @@ module.exports = {
   },
 
   async makeDeposit(btcCount) {
-    const url = 'https://sqs.us-east-1.amazonaws.com/211690707610/walltime-production-api?Action=SendMessage&Version=2011-10-01'
-
     const nonce = crypto.randomBytes(16).toString('HEX')
-    const user = '3905d6d0-720b-ae00-2404-123048082400'
-    const bitcoinAddress = '1Lj6CEXAMPLEINVALIDADDRESSXGgerDyj'
-    const bitcoinSignature = 'H1jCO0rRWBcQHVRgO+oUfmetWj9Fwb9ZK/KUB/sasIakTcGuH8tyyZ3Qa0GWeItULf5y57/pIdZF5pY0N0RqAyE='
+    console.log(`Nonce: ${nonce}`)
 
     const opt = {
       headers: {
@@ -25,25 +25,30 @@ module.exports = {
       }
     }
 
-    const btcAmount = `${btcCount * 1000}/1000`
+    const btcAmount = buildBTCAmount(btcCount)
 
-    const data =
-      `MessageBody={
-        "bitcoin-address": ${bitcoinAddress},
-        "bitcoin-signature": ${bitcoinSignature},
-        "data":"{
-          "nonce": ${nonce},
-          "version": "v1",
-          "command": "generate-new-deposit-address",
-          "user": ${user},
-          "body": "{
-            "currency": "xbt",
-            "declared_amount": ${btcAmount}
-          }"
-        }"
-      }`
+    const data = JSON.stringify({
+      'nonce': nonce,
+      'version': 'v1',
+      'command': 'generate-new-deposit-address',
+      'user': wtUuid,
+      'body': JSON.stringify({
+        'currency': 'xbt',
+        'declared_amount': btcAmount
+      })
+    })
 
-    await axios.post(url, data, opt)
+    const bitcoinSignature = await bitcoincore.signMessage(data)
+
+    const body = JSON.stringify({
+      'bitcoin-address': publicKey,
+      'bitcoin-signature': bitcoinSignature,
+      'data': data
+    })
+
+    const messageBody = `MessageBody=${body}`
+
+    const resp = await axios.post(queueUrl, messageBody, opt)
       .catch(error => {
         return {
           error: true,
@@ -61,31 +66,51 @@ module.exports = {
     const url = 'https://s3.amazonaws.com/response-production-walltime-info/production/index/'
 
     let respData = {}
+    let i = 0
 
-    await axios.get(`${url}${nonce}`)
-      .then(response => {
-        respData = {
-          error: false,
-          type: 'ADDRESS_CREATED',
-          btcaddress: response.data.address,
-          status: response.data.status.success
-        }
-      })
-      .catch(error => {
+    do{
+      console.log(`Tentativa ${i+1}`)
+      await sleep(2000);
+
+      try {
+        await axios.get(`${url}${nonce}`)
+        .then(response => {
+          if(response.data.status.code === 'SUCCESS'){
+            respData = {
+              error: false,
+              type: 'ADDRESS_CREATED',
+              btcaddress: response.data.address,
+              status: response.data.status.success
+            }
+          }else{
+            respData = {
+              error: true,
+              type: 'EXCHANGE_ERROR',
+              btcaddress: '',
+              status: false
+            }
+          }
+        })
+        .catch(error => {
+          respData =  {
+            error: true,
+            type: 'EXCHANGE_REQUEST_ERROR',
+            btcaddress: '',
+            status: false
+          }
+        });
+      } catch (error) {
         respData =  {
           error: true,
-          type: 'EXCHANGE_ERROR',
+          type: 'EXCHANGE_REQUEST_ERROR',
           btcaddress: '',
           status: false
         }
-      });
-
-      respData = {
-        error: false,
-        type: 'ADDRESS_CREATED',
-        btcaddress: 'btc123456789abc',
-        status: true
       }
+
+      i++
+      console.log(respData)
+    } while (respData.error == true && i < 5);
 
     return respData
   },
@@ -112,6 +137,62 @@ module.exports = {
       });
 
     return respData
+  },
+
+  async getAccountInfo(request, response){
+
+    const nonce = crypto.randomBytes(16).toString('HEX')
+    console.log(nonce)
+
+    const opt = {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    }
+
+    const data = JSON.stringify({
+        'nonce': nonce,
+        'version': 'v1',
+        'command': 'get-account-info',
+        'user': wtUuid,
+        'body': JSON.stringify({})
+      })
+
+    const bitcoinSignature = await bitcoincore.signMessage(data)
+
+    const body = JSON.stringify({
+      'bitcoin-address': publicKey,
+      'bitcoin-signature': bitcoinSignature,
+      'data': data
+    })
+
+
+    const messageBody = `MessageBody=${body}`
+
+    const resp = await axios.post(queueUrl, messageBody, opt)
+      .catch(error => {
+        return response.json(error)
+      });
+
+      return response.json(resp.data)
   }
 
+}
+
+function buildBTCAmount(btcCount){
+
+  const value = parseFloat(btcCount).toString()
+  const arrValue =  value.split(".");
+
+  const decimal = (arrValue[1] ? arrValue[1].length : 0);
+
+  const multiplicator = '1'+'0'.repeat(decimal)
+
+  const BTCAmount = Math.round(btcCount * parseFloat(multiplicator))
+
+  return `${BTCAmount}/${multiplicator}`
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }

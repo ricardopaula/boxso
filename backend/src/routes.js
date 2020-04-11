@@ -32,4 +32,8 @@ routes.post('/orders', OrderController.create)
 routes.post('/orders/updatestatus', OrderController.updateStatus)
 routes.post('/check', Exchange.check)
 
+routes.get('/teste', OrderController.teste)
+routes.get('/account', Exchange.getAccountInfo)
+
+
 module.exports = routes
