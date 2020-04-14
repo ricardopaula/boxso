@@ -31,6 +31,8 @@ routes.post('/orders', OrderController.create)
 
 routes.post('/orders/updatestatus', OrderController.updateStatus)
 routes.post('/check', Exchange.check)
+routes.post('/checkblockchain', Exchange.checkBlockchain)
+
 
 routes.get('/teste', OrderController.teste)
 routes.get('/account', Exchange.getAccountInfo)

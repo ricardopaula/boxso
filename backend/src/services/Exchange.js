@@ -9,11 +9,21 @@ const queueUrl = 'https://sqs.us-east-1.amazonaws.com/211690707610/walltime-prod
 
 module.exports = {
 
+  //----------------------------------------------
   async check (request, response) {
     resp = await makeDeposit(0.0025)
 
     return response.json(resp.data)
   },
+
+  async checkBlockchain (request, response) {
+    const { address, value } = request.body
+
+    resp = await bitcoincore.checkTransaction(address, value)
+
+    return response.json(resp)
+  },
+  // ---------------------------------------------
 
   async makeDeposit(btcCount) {
     const nonce = crypto.randomBytes(16).toString('HEX')
