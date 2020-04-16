@@ -11,6 +11,8 @@ module.exports = {
 
   //----------------------------------------------
   async check (request, response) {
+
+
     resp = await makeDeposit(0.0025)
 
     return response.json(resp.data)
@@ -119,7 +121,6 @@ module.exports = {
       }
 
       i++
-      console.log(respData)
     } while (respData.error == true && i < 5);
 
     return respData
@@ -186,7 +187,6 @@ module.exports = {
 
       return response.json(resp.data)
   }
-
 }
 
 function buildBTCAmount(btcCount){

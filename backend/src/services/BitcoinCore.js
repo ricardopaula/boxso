@@ -18,26 +18,38 @@ module.exports = {
       .catch(error => {
         return {
           error: true,
-          type: 'BLOCKCHAIN_ERROR'
+          type: 'BLOCKCHAIN_ERROR',
+          status: false,
+          btctx: ''
         }
       });
 
-    const received = resp.data.data.received
+      if (!resp.data.data) {
+        return {
+          error: false,
+          type: 'BLOCKCHAIN_ERROR',
+          status: false,
+          btctx: ''
+        }
+      }
+
     const respValue = resp.data.data.unconfirmed_received
+    const balance = resp.data.data.balance
+    const lastTx = resp.data.data.last_tx
 
-    console.log(url)
-    console.log(respValue)
-    console.log(btcValue)
-
-    if (respValue >= btcValue) {
+    if (respValue >= btcValue || balance >= respValue) {
       respData = {
         error: false,
-        type: 'TRANSACTION_RECEIVED'
+        type: 'TRANSACTION_RECEIVED',
+        status: true,
+        btctx: lastTx
       }
     }else{
       respData = {
         error: false,
-        type: 'TRANSACTION_NOT_RECEIVED'
+        type: 'TRANSACTION_NOT_RECEIVED',
+        status: false,
+        btctx: ''
       }
     }
 

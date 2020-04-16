@@ -125,7 +125,7 @@ module.exports = {
     const order = await connection('orders')
       .where('uuid', uuid)
       .where('shopkeeper_id', shopkeeper_id)
-      .select('btctx')
+      .select(['btcaddress', 'btccount'])
       .first()
 
     if (!order) {
@@ -133,7 +133,7 @@ module.exports = {
     }
 
     let transactionStatus = ''
-    const { error, status } = await exchange.checkDeposit(order.btctx)
+    const { error, status, btctx } = await bitcoincore.checkTransaction(order.btcaddress, order.btccount)
 
     if (error) {
       return response.json({
@@ -144,25 +144,27 @@ module.exports = {
 
     if(status){
       transactionStatus = 'confirmed'
+      await module.exports.updateStatus(uuid, transactionStatus, btctx)
+      recived = true
     }else{
       transactionStatus = 'pending'
+      recived = false
     }
-
-    await module.exports.updateStatus(order.btctx, transactionStatus)
 
     return response.json({
       error: false,
       type: 'VERIFY_STATUS_OK',
-      status: status
+      recived: recived
     })
   },
 
   // UTILITARIOS
-  async updateStatus (btctx, status) {
+  async updateStatus (uuid, status, btctx) {
 
     await connection('orders')
       .update('status', status)
-      .where('btctx', btctx)
+      .update('btctx', btctx)
+      .where('uuid', uuid)
 
     return { ok: 'ok' }
   },
@@ -177,7 +179,6 @@ module.exports = {
 
     return response.json({signature: signature, verified: verified})
   }
-
 }
 
 // Criar order na exchange e retorna o endereço, quantidade de BTC e cotação.
