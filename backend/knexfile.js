@@ -5,9 +5,9 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'boxso',
-      user: 'postgres',
-      password: 'postgres'
+      database: process.env.BOXSO_DB_NAME,
+      user: process.env.BOXSO_DB_USER,
+      password: process.env.BOXSO_DB_PASSWORD
     },
     migrations: {
       directory: './src/database/migrations'

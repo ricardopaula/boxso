@@ -1,4 +1,14 @@
 
+export BOXSO_DB_NAME=''
+export BOXSO_DB_USER=''
+export BOXSO_DB_PASSWORD=''
+export BOXSO_DB_HOST=''
+
+alias wt=''
+export WT_LOCAL_STORAGE_PASSWORD=''
+export WT_UUID=''
+export BTC_PRIVATE_KEY=''
+export BTC_PUBLIC_KEY=''
 
 npx knex migrate:make create_xxx
 
