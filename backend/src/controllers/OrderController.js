@@ -5,6 +5,7 @@ const bitcore = require('bitcore-lib');
 const bitcoincore = require('../services/BitcoinCore')
 
 const exchange = require('../services/Exchange')
+const helper = require('../services/Helper')
 
 module.exports = {
   async index (request, response) {
@@ -66,7 +67,7 @@ module.exports = {
 
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
-    const shopkeeper_id = await getShopkeeper(apiid, apikey)
+    const { shopkeeper_id, fantasyname } = await getShopkeeper(apiid, apikey)
 
     if (!shopkeeper_id) {
       return response.json({
@@ -100,7 +101,7 @@ module.exports = {
       error: false,
       type: 'ORDER_CREATED',
       uuid: uuid,
-      qrcode: `bitcoin:${btcaddress}?amount=${btccount}`,
+      qrcode: `bitcoin:${btcaddress}?amount=${btccount}&message=${helper.replaceSpecialChars(fantasyname)}`,
       btcvalue: btcvalue
     })
   },
@@ -213,12 +214,15 @@ async function getShopkeeper (apiid, apikey) {
   const shopkeeper = await connection('shopkeepers')
     .where('apiid', apiid)
     .where('apikey', apikey)
-    .select('id')
+    .select(['id','fantasyname'])
     .first()
 
   if (!shopkeeper) {
     return null
   }
 
-  return shopkeeper.id
+  return {
+    shopkeeper_id: shopkeeper.id,
+    fantasyname: shopkeeper.fantasyname
+  }
 }
