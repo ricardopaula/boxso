@@ -12,30 +12,30 @@ const routes = express.Router()
 
 routes.post('/sessions', SessionController.login)
 
-routes.get('/shopkeepers', ShopkeeperController.index)
-routes.get('/shopkeepers/check-credentials', ShopkeeperController.check_credentials)
-routes.get('/shopkeepers/show/:uuid', ShopkeeperController.list)
+routes.get('/api/shopkeepers', ShopkeeperController.index)
+routes.get('/api/shopkeepers/check-credentials', ShopkeeperController.check_credentials)
+routes.get('/api/shopkeepers/show/:uuid', ShopkeeperController.list)
 
-routes.post('/shopkeepers', ShopkeeperController.create)
+routes.post('/api/shopkeepers', ShopkeeperController.create)
 
-routes.put('/shopkeepers/:uuid', ShopkeeperController.update)
+routes.put('/api/shopkeepers/:uuid', ShopkeeperController.update)
 
-routes.get('/orders', OrderController.index)
-routes.get('/orders/show/:uuid', OrderController.list)
-routes.get('/orders/shopkeepers/:uuid', OrderController.list_shopkeeper)
-routes.get('/orders/:uuid/status', OrderController.checkStatus)
+routes.get('/api/orders', OrderController.index)
+routes.get('/api/orders/show/:uuid', OrderController.list)
+routes.get('/api/orders/shopkeepers/:uuid', OrderController.list_shopkeeper)
+routes.get('/api/orders/:uuid/status', OrderController.checkStatus)
 
-routes.post('/orders', OrderController.create)
+routes.post('/api/orders', OrderController.create)
 
 // UTILITARIOS
 
-routes.post('/orders/updatestatus', OrderController.updateStatus)
-routes.post('/check', Exchange.check)
-routes.post('/checkblockchain', Exchange.checkBlockchain)
+routes.post('/api/orders/updatestatus', OrderController.updateStatus)
+routes.post('/api/check', Exchange.check)
+routes.post('/api/checkblockchain', Exchange.checkBlockchain)
 
 
-routes.get('/teste', OrderController.teste)
-routes.get('/account', Exchange.getAccountInfo)
+routes.get('/api/teste', OrderController.teste)
+routes.get('/api/account', Exchange.getAccountInfo)
 
 
 module.exports = routes
