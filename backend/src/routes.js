@@ -10,7 +10,7 @@ const Exchange = require('./services/Exchange')
 
 const routes = express.Router()
 
-routes.post('/sessions', SessionController.login)
+routes.post('/api/sessions', SessionController.login)
 
 routes.get('/api/shopkeepers', ShopkeeperController.index)
 routes.get('/api/shopkeepers/check-credentials', ShopkeeperController.check_credentials)
