@@ -67,13 +67,16 @@ module.exports = {
 
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
-    const { shopkeeper_id, fantasyname } = await getShopkeeper(apiid, apikey)
+    const { shopkeeper } = await getShopkeeper(apiid, apikey)
 
-    if (!shopkeeper_id) {
+    if (!shopkeeper) {
       return response.json({
         error: true,
         type: 'INVALID_CREDENTIALS' })
     }
+
+    const shopkeeper_id = shopkeeper.id
+    const fantasyname = shopkeeper.fantasyname
 
     const {error, type, btcaddress, btcvalue, btccount, nonce } = await createOrderInExchange(brlvalue)
 
@@ -222,7 +225,6 @@ async function getShopkeeper (apiid, apikey) {
   }
 
   return {
-    shopkeeper_id: shopkeeper.id,
-    fantasyname: shopkeeper.fantasyname
+    shopkeeper
   }
 }

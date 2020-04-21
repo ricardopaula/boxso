@@ -121,7 +121,7 @@ module.exports = {
       }
 
       i++
-    } while (respData.error == true && i < 5);
+    } while (respData.error == true && i < 10);
 
     return respData
   },
