@@ -221,7 +221,7 @@ async function getShopkeeper (apiid, apikey) {
     .first()
 
   if (!shopkeeper) {
-    return null
+    return { shopkeeper: null }
   }
 
   return {
