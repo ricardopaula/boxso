@@ -6,6 +6,7 @@ const bitcoincore = require('../services/BitcoinCore')
 
 const exchange = require('../services/Exchange')
 const helper = require('../services/Helper')
+const shopk = require('./ShopkeeperController')
 
 module.exports = {
   async index (request, response) {
@@ -37,7 +38,7 @@ module.exports = {
     return response.json(orders)
   },
 
-  async list_shopkeeper (request, response) {
+  async listShopkeeper (request, response) {
     const { uuid } = request.params
 
     const { page = 1 } = request.query
@@ -60,6 +61,17 @@ module.exports = {
   },
 
   async create (request, response) {
+
+    // return response.json({
+    //   "error": false,
+    //   "type": "ORDER_CREATED",
+    //   "uuid": "fe8deb91900d43bf98691aa1ef17b8ed",
+    //   "qrcode": "bitcoin:3BUD9nreKM63pvqoRu7StfVFsogkwifsHF?amount=0.00281926&message=mercado-tio-joao",
+    //   "btcvalue": "52496.0"
+    // });
+
+
+
     const { brlvalue } = request.body
 
     const status = 'pending'
@@ -67,7 +79,7 @@ module.exports = {
 
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
-    const { shopkeeper } = await getShopkeeper(apiid, apikey)
+    const { shopkeeper } = await shopk.getShopkeeper(apiid, apikey)
 
     if (!shopkeeper) {
       return response.json({
@@ -113,6 +125,15 @@ module.exports = {
     const { uuid } = request.params
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
+
+
+    console.log('consultou');
+
+    // return response.json({
+    //   "error": false,
+    //   "type": "VERIFY_STATUS_OK",
+    //   "recived": true
+    // });
 
     const shopkeeper = await connection('shopkeepers')
       .where('apiid', apiid)
@@ -210,21 +231,5 @@ async function createOrderInExchange (brlvalue) {
       btcvalue: btcvalue,
       btccount: btccount
     }
-  }
-}
-
-async function getShopkeeper (apiid, apikey) {
-  const shopkeeper = await connection('shopkeepers')
-    .where('apiid', apiid)
-    .where('apikey', apikey)
-    .select(['id','fantasyname'])
-    .first()
-
-  if (!shopkeeper) {
-    return { shopkeeper: null }
-  }
-
-  return {
-    shopkeeper
   }
 }

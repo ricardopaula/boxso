@@ -10,10 +10,12 @@ const Exchange = require('./services/Exchange')
 
 const routes = express.Router()
 
+routes.get('/api', SessionController.index)
+
 routes.post('/api/sessions', SessionController.login)
+routes.get('/api/sessions/check-credentials', SessionController.checkCredentials)
 
 routes.get('/api/shopkeepers', ShopkeeperController.index)
-routes.get('/api/shopkeepers/check-credentials', ShopkeeperController.check_credentials)
 routes.get('/api/shopkeepers/show/:uuid', ShopkeeperController.list)
 
 routes.post('/api/shopkeepers', ShopkeeperController.create)
@@ -22,7 +24,7 @@ routes.put('/api/shopkeepers/:uuid', ShopkeeperController.update)
 
 routes.get('/api/orders', OrderController.index)
 routes.get('/api/orders/show/:uuid', OrderController.list)
-routes.get('/api/orders/shopkeepers/:uuid', OrderController.list_shopkeeper)
+routes.get('/api/orders/shopkeepers/:uuid', OrderController.listShopkeeper)
 routes.get('/api/orders/:uuid/status', OrderController.checkStatus)
 
 routes.post('/api/orders', OrderController.create)

@@ -128,20 +128,20 @@ module.exports = {
     return response.json({ ok: true })
   },
 
-  async check_credentials (request, response) {
-    const apiid = request.headers.apiid
-    const apikey = request.headers.apikey
-
-    const shopkeepers = await connection('shopkeepers')
+  async getShopkeeper (apiid, apikey) {
+    const shopkeeper = await connection('shopkeepers')
       .where('apiid', apiid)
       .where('apikey', apikey)
-      .select(['uuid'])
+      .select(['id','fantasyname'])
       .first()
 
-    if (!shopkeepers) {
-      return response.json({ type: 'INVALID_CREDENTIALS' })
+    if (!shopkeeper) {
+      return { shopkeeper: null }
     }
-    return response.json({ type: 'CREDENTIALS_OK' })
+
+    return {
+      shopkeeper
+    }
   }
 
 }
