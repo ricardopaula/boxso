@@ -11,38 +11,50 @@ module.exports = {
 
   async checkTransaction(address, value){
     const btcValue = (value * 100000000).toFixed();
-    const url = `https://chain.api.btc.com/v3/address/${address}`
+    const url1 = `https://chain.api.btc.com/v3/address/${address}`
+    const url2 = `https://chainflyer.bitflyer.com/v1/address/${address}`
+
     let respData = null
 
-    const resp = await axios.get(url)
-      .catch(error => {
-        return {
-          error: true,
-          type: 'BLOCKCHAIN_ERROR',
-          status: false,
-          btctx: ''
-        }
-      });
+    promise1 = axios.get(url1, {timeout: 5000})
+    promise2 = axios.get(url2, {timeout: 5000})
 
-      if (!resp.data.data) {
-        return {
-          error: false,
-          type: 'BLOCKCHAIN_ERROR',
-          status: false,
-          btctx: ''
-        }
+    await Promise.all([promise1, promise2]).then((values) => {
+      [resp1, resp2] = values
+    });
+
+    if (!resp1.data.data && !resp2.data) {
+      return {
+        error: false,
+        type: 'BLOCKCHAIN_ERROR',
+        status: false,
+        btctx: ''
       }
+    }
 
-    const respValue = resp.data.data.unconfirmed_received
-    const balance = resp.data.data.balance
-    const lastTx = resp.data.data.last_tx
+    let respValue1 = null
+    let balance1 = null
 
-    if (respValue >= btcValue || balance >= respValue) {
+    if(resp1.data.data){
+      respValue1 = resp1.data.data.unconfirmed_received
+      balance1 = resp1.data.data.balance
+    }
+
+    let respValue2 = null
+    let balance2 = null
+
+    if(resp2.data){
+      respValue2 = resp2.data.unconfirmed_balance
+      balance2 = resp2.data.confirmed_balance
+    }
+
+    if ((respValue1 >= btcValue ) ||
+        (respValue2 >= btcValue )) {
       respData = {
         error: false,
         type: 'TRANSACTION_RECEIVED',
         status: true,
-        btctx: lastTx
+        btctx: ''
       }
     }else{
       respData = {

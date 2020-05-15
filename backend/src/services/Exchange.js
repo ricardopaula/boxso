@@ -40,6 +40,8 @@ module.exports = {
     const btcAmount = buildBTCAmount(btcCount)
 
     const data = JSON.stringify({
+
+      "expiration": getExpiration(),
       'nonce': nonce,
       'version': 'v1',
       'command': 'generate-new-deposit-address',
@@ -69,6 +71,8 @@ module.exports = {
         }
       });
 
+      // console.log(resp);
+
     const { error, type, btcaddress } = await module.exports.checkDeposit(nonce)
 
     return { error, type, btcaddress, nonce }
@@ -82,12 +86,17 @@ module.exports = {
 
     do{
       console.log(`Tentativa ${i+1}`)
-      await sleep(2000);
+      await sleep(30000);
 
       try {
+        // console.log(`${url}${nonce}`)
+
         await axios.get(`${url}${nonce}`)
         .then(response => {
+          // console.log(response.data);
+
           if(response.data.status.code === 'SUCCESS'){
+            // console.log('sucesso')
             respData = {
               error: false,
               type: 'ADDRESS_CREATED',
@@ -95,6 +104,7 @@ module.exports = {
               status: response.data.status.success
             }
           }else{
+            // console.log('exchange error')
             respData = {
               error: true,
               type: 'EXCHANGE_ERROR',
@@ -104,6 +114,8 @@ module.exports = {
           }
         })
         .catch(error => {
+          // console.log('catch error')
+          // console.log(error)
           respData =  {
             error: true,
             type: 'EXCHANGE_REQUEST_ERROR',
@@ -112,6 +124,7 @@ module.exports = {
           }
         });
       } catch (error) {
+        // console.log('catch error 2')
         respData =  {
           error: true,
           type: 'EXCHANGE_REQUEST_ERROR',
@@ -162,6 +175,7 @@ module.exports = {
     }
 
     const data = JSON.stringify({
+        "expiration": getExpiration(),
         'nonce': nonce,
         'version': 'v1',
         'command': 'get-account-info',
@@ -205,4 +219,9 @@ function buildBTCAmount(btcCount){
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function getExpiration(){
+  var expiration = new Date();
+  expiration.setMinutes(expiration.getMinutes() + 2);
 }

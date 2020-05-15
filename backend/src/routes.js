@@ -26,6 +26,7 @@ routes.get('/api/orders', OrderController.index)
 routes.get('/api/orders/show/:uuid', OrderController.list)
 routes.get('/api/orders/shopkeepers/:uuid', OrderController.listShopkeeper)
 routes.get('/api/orders/:uuid/status', OrderController.checkStatus)
+routes.get('/api/orders/latest', OrderController.latestConfirmedList)
 
 routes.post('/api/orders', OrderController.create)
 

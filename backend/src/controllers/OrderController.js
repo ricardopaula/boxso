@@ -22,6 +22,7 @@ module.exports = {
         'orders.*',
         'shopkeepers.fantasyname'
       ])
+      .orderBy('id', 'asc')
 
     response.header('X-Total-Count', total.count)
     return response.json(orders)
@@ -34,6 +35,7 @@ module.exports = {
       .where('uuid', uuid)
       .select(['*'])
       .first()
+      .orderBy('id', 'asc')
 
     return response.json(orders)
   },
@@ -55,8 +57,32 @@ module.exports = {
       .select([
         'orders.*'
       ])
+      .orderBy('id', 'asc')
 
     response.header('X-Total-Count', total.count)
+    return response.json(orders)
+  },
+
+  async latestConfirmedList (request, response) {
+    const apiid = request.headers.apiid
+    const apikey = request.headers.apikey
+    const { shopkeeper } = await shopk.getShopkeeper(apiid, apikey)
+
+    if (!shopkeeper) {
+      return response.json({
+        error: true,
+        type: 'INVALID_CREDENTIALS' })
+    }
+
+    const orders = await connection('orders')
+      .where('shopkeeper_id', shopkeeper.id)
+      .where('status', 'confirmed')
+      .limit(5)
+      .select([
+        'orders.*'
+      ])
+      .orderBy('id', 'desc')
+
     return response.json(orders)
   },
 
