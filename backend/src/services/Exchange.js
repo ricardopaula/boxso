@@ -38,7 +38,6 @@ module.exports = {
     }
 
     const btcAmount = buildBTCAmount(btcCount)
-
     const data = JSON.stringify({
 
       "expiration": getExpiration(),
@@ -48,7 +47,8 @@ module.exports = {
       'user': wtUuid,
       'body': JSON.stringify({
         'currency': 'xbt',
-        'declared_amount': btcAmount
+        'declared_amount': btcAmount,
+        'bech32': false
       })
     })
 
@@ -60,18 +60,23 @@ module.exports = {
       'data': data
     })
 
-    const messageBody = `MessageBody=${body}`
+    const messageBody = `MessageBody=${encodeURIComponent(body)}`
 
-    const resp = await axios.post(queueUrl, messageBody, opt)
-      .catch(error => {
-        return {
-          error: true,
-          type: 'EXCHANGE_ERROR_MAKE_DEPOSIT',
-          btcaddress: ''
-        }
-      });
-
-      // console.log(resp);
+    const resp = await axios({
+      method: 'post',
+      url: queueUrl,
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded"
+      },
+      data: messageBody
+    })
+    .catch(error => {
+      return {
+        error: true,
+        type: 'EXCHANGE_ERROR_MAKE_DEPOSIT',
+        btcaddress: ''
+      }
+    });
 
     const { error, type, btcaddress } = await module.exports.checkDeposit(nonce)
 
@@ -86,17 +91,12 @@ module.exports = {
 
     do{
       console.log(`Tentativa ${i+1}`)
-      await sleep(30000);
+      await sleep(1000);
 
       try {
-        // console.log(`${url}${nonce}`)
-
         await axios.get(`${url}${nonce}`)
         .then(response => {
-          // console.log(response.data);
-
           if(response.data.status.code === 'SUCCESS'){
-            // console.log('sucesso')
             respData = {
               error: false,
               type: 'ADDRESS_CREATED',
@@ -104,7 +104,6 @@ module.exports = {
               status: response.data.status.success
             }
           }else{
-            // console.log('exchange error')
             respData = {
               error: true,
               type: 'EXCHANGE_ERROR',
@@ -114,8 +113,6 @@ module.exports = {
           }
         })
         .catch(error => {
-          // console.log('catch error')
-          // console.log(error)
           respData =  {
             error: true,
             type: 'EXCHANGE_REQUEST_ERROR',
@@ -124,7 +121,6 @@ module.exports = {
           }
         });
       } catch (error) {
-        // console.log('catch error 2')
         respData =  {
           error: true,
           type: 'EXCHANGE_REQUEST_ERROR',
@@ -166,7 +162,7 @@ module.exports = {
   async getAccountInfo(request, response){
 
     const nonce = crypto.randomBytes(16).toString('HEX')
-    console.log(nonce)
+    console.log(`Nonce: ${nonce}`)
 
     const opt = {
       headers: {
@@ -190,7 +186,6 @@ module.exports = {
       'bitcoin-signature': bitcoinSignature,
       'data': data
     })
-
 
     const messageBody = `MessageBody=${body}`
 
@@ -222,6 +217,7 @@ function sleep(ms) {
 }
 
 function getExpiration(){
-  var expiration = new Date();
-  expiration.setMinutes(expiration.getMinutes() + 2);
+  let expiration = new Date();
+  expiration.setSeconds(expiration.getSeconds() + 60 * 60 * 3);
+  return expiration.toISOString();
 }
