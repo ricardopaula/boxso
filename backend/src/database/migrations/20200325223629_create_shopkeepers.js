@@ -19,13 +19,10 @@ exports.up = function (knex) {
     table.string('bank')
     table.string('ag')
     table.string('cc')
-
     table.string('apikey')
     table.string('apiid')
-
     table.boolean('admin').notNullable()
     table.boolean('active').notNullable()
-
     table.timestamps(false, true);
   })
 }
