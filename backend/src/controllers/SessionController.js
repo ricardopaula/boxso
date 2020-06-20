@@ -31,9 +31,9 @@ module.exports = {
     const apikey = request.headers.apikey
 
 
-    console.log('Check Credentials');
-    console.log(apiid);
-    console.log(apikey);
+    // console.log('Check Credentials');
+    // console.log(apiid);
+    // console.log(apikey);
 
     const shopkeeper = await connection('shopkeepers')
       .where('apiid', apiid)
