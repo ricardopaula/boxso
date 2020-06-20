@@ -5,7 +5,8 @@ const helper = require('../src/services/Helper');
 
 describe('Test BitcoinCore functions', function(){
   it('should sign message', async function(){
-    const expectSignature = 'HzxPOUwKaXC9q/mucNS7noq3eRVRLhJJQVeiNYy31bILCBFlzfwvjCg9FJiOo7yZbQ116LE18rJQ6EJY3Yx1LBY='
+    const expectSignature =
+      'HzxPOUwKaXC9q/mucNS7noq3eRVRLhJJQVeiNYy31bILCBFlzfwvjCg9FJiOo7yZbQ116LE18rJQ6EJY3Yx1LBY='
     const signature = await bitcoincore.signMessage('hello-word');
 
     assert.equal(signature, expectSignature);
@@ -13,7 +14,7 @@ describe('Test BitcoinCore functions', function(){
 });
 
 describe('Test Helper functions', function(){
-  it('should text withou special characters', function(done){
+  it('should replace special characters', function(done){
     const expectResponse = 'aaaaaeeeeeiiioooouuuc';
     const response = helper.replaceSpecialChars('aáàãâeéèẽêiíìoóòõuúùç');
 
@@ -21,3 +22,4 @@ describe('Test Helper functions', function(){
     done();
   });
 });
+
