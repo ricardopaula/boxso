@@ -9,18 +9,20 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./backend
 
     strategy:
       matrix:
         node-version: [10.x]
 
     steps:
-    - run: ls
-    - run: cd ../../backend
-    - run: ls
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      run: ls -R
+      working-directory: ${{env.working-directory}}
+      run: ls -R
+    uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
