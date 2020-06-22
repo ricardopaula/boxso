@@ -19,12 +19,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      run: ls -R
-      working-directory: ${{env.working-directory}}
-      run: ls -R
     uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - run: ls -R
+    - working-directory: ${{env.working-directory}}
+    - run: ls -R
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
