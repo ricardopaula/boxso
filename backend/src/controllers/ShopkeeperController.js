@@ -4,7 +4,7 @@ const crypto = require('crypto')
 module.exports = {
 
   async index (request, response) {
-    const shopkeepers = await connection('shopkeepers').select('*')
+    const shopkeepers = await connection('shopkeepers').select('*').orderBy('id', 'asc')
 
     return response.json(shopkeepers)
   },
