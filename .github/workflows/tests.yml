@@ -14,12 +14,10 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./backend
-        run: ls
         run: |
           npm install
       - name: Run tests
         working-directory: ./backend
-        run: ls
         run: npm test
 
   # test:
