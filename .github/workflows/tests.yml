@@ -9,8 +9,6 @@ jobs:
     env:
       NODE_ENV: test
     steps:
-      # - name: Checkout
-      #   uses: actions/checkout@v1
       - name: Setup Postgres
         uses: harmon758/postgresql-action@v1
         with:
@@ -18,8 +16,8 @@ jobs:
           postgresql db: boxso_test
           postgresql user: dev
           postgresql password: dev
+      - uses: actions/cache@v1
       - name: Teste de pasta 1
-        uses: actions/checkout@v1
         working-directory: ./
         run: ls
       - name: Teste de pasta 2
