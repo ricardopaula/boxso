@@ -10,7 +10,12 @@ jobs:
       - name: Setup Postgres
         uses: harmon758/postgresql-action@v1
         with:
-          postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
+          postgresql version: 11
+          postgresql db: boxso_test
+          postgresql user: dev
+          postgresql password: dev
+      - name: Teste de pasta
+        run: ls
       - name: Install Dependencies
         working-directory: ./backend
         run: npm install
