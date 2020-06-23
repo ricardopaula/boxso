@@ -9,6 +9,7 @@ jobs:
     env:
       NODE_ENV: test
     steps:
+      - uses: actions/checkout@v1
       - name: Setup Postgres
         uses: harmon758/postgresql-action@v1
         with:
@@ -22,9 +23,6 @@ jobs:
       - name: Install Dependencies
         working-directory: ./backend
         run: npm install
-      - name: Create Database
-        working-directory: ./backend
-        run: echo "teste"
       - name: Running migrations
         working-directory: ./backend
         run: npx knex migrate:latest
