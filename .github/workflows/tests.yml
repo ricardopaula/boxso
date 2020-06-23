@@ -3,22 +3,34 @@ name: Node.js CI
 on: [push]
 
 jobs:
-  tests:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-
-    container: node:10
     steps:
-      # - uses: harmon758/postgresql-action@v1
-      #   with:
-      #     postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
+      - name: Checkout Repo
+        uses: actions/checkout@master
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: npm install
+      - name: Build
+        working-directory: ./backend
+        run: npm run test
+  # tests:
+  #   runs-on: ubuntu-latest
 
-      - name: Install dependencies
-        working-directory: ./backend
-        run: |
-          npm install
-      - name: Run tests
-        working-directory: ./backend
-        run: npm test
+  #   container: node:10
+  #   steps:
+  #     # - uses: harmon758/postgresql-action@v1
+  #     #   with:
+  #     #     postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
+
+  #     - name: Install dependencies
+  #       working-directory: ./backend
+  #       run: |
+  #         npm install
+  #     - name: Run tests
+  #       working-directory: ./backend
+  #       run: npm test
 
   # test:
 
