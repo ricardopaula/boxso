@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   tests:
-    runs-on: postgres
+    runs-on: harmon758/postgresql-action@v1
 
     container: node:10
     steps:
