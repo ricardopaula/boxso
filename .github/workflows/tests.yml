@@ -19,7 +19,7 @@ jobs:
           postgresql user: dev
           postgresql password: dev
       - name: Teste de pasta 1
-        uses: actions/checkout@v1
+        # uses: actions/checkout@v1
         working-directory: ./
         run: ls
       - name: Teste de pasta 2
