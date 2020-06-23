@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NODE_ENV: test
+      BTC_PRIVATE_KEY: ${{ secrets.BTC_PRIVATE_KEY }}
     steps:
       - uses: actions/checkout@v1
       - name: Setup Postgres
