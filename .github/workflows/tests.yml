@@ -15,8 +15,8 @@ jobs:
         with:
           postgresql version: 11
           postgresql db: boxso_test
-          postgresql user: dev
-          postgresql password: dev
+          postgresql user: postgres
+          postgresql password: postgres
       - name: Teste de pasta
         working-directory: ./
         run: ls
