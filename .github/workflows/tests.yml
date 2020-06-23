@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   tests:
-    runs-on: node-postgresql
+    runs-on: postgres
 
     container: node:10
     steps:
