@@ -8,11 +8,11 @@ jobs:
     container: node:10
     steps:
       - name: Install dependencies
-        working-directory: ./backend
+        working-directory: backend
         run: |
           npm install
       - name: Run tests
-        working-directory: ./backend
+        working-directory: backend
         run: npm test
 
   # test:
