@@ -4,17 +4,24 @@ on: [push]
 
 jobs:
   build:
-    name: Build
+    name: Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
+      - uses: harmon758/postgresql-action@v1
+        with:
+          postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
       - name: Install Dependencies
         working-directory: ./backend
         run: npm install
-      - name: Build
+      - name: Create Database
         working-directory: ./backend
-        run: npm run test
+        run: echo "teste"
+      - name: Running migrations
+        working-directory: ./backend
+        run: npx knex migrate:latest
+      - name: Run Tests
+        working-directory: ./backend
+        run: npm test
   # tests:
   #   runs-on: ubuntu-latest
 
