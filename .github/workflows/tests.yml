@@ -15,6 +15,7 @@ jobs:
           postgresql user: dev
           postgresql password: dev
       - name: Teste de pasta
+        working-directory: ./
         run: ls
       - name: Install Dependencies
         working-directory: ./backend
