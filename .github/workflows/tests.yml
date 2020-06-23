@@ -9,6 +9,8 @@ jobs:
     env:
       NODE_ENV: test
     steps:
+      - name: Checkout
+        uses: actions/checkout@v1
       - name: Setup Postgres
         uses: harmon758/postgresql-action@v1
         with:
