@@ -16,11 +16,7 @@ jobs:
           postgresql db: boxso_test
           postgresql user: dev
           postgresql password: dev
-      - name: Teste de pasta 1
-        working-directory: ./
-        run: ls
-      - name: Teste de pasta 2
-        uses: actions/checkout@v1
+      - name: Teste de pasta
         working-directory: ./
         run: ls
       - name: Install Dependencies
