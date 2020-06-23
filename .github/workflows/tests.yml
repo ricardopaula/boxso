@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   tests:
-    runs-on: spittet/node-postgresql
+    runs-on: node-postgresql
 
     container: node:10
     steps:
