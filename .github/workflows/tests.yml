@@ -7,7 +7,8 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: harmon758/postgresql-action@v1
+      - name: Setup Postgres
+        uses: harmon758/postgresql-action@v1
         with:
           postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
       - name: Install Dependencies
@@ -22,40 +23,3 @@ jobs:
       - name: Run Tests
         working-directory: ./backend
         run: npm test
-  # tests:
-  #   runs-on: ubuntu-latest
-
-  #   container: node:10
-  #   steps:
-  #     # - uses: harmon758/postgresql-action@v1
-  #     #   with:
-  #     #     postgresql version: '11'  # See https://hub.docker.com/_/postgres for available versions
-
-  #     - name: Install dependencies
-  #       working-directory: ./backend
-  #       run: |
-  #         npm install
-  #     - name: Run tests
-  #       working-directory: ./backend
-  #       run: npm test
-
-  # test:
-
-  #   runs-on: ubuntu-latest
-
-  #   strategy:
-  #     matrix:
-  #       node-version: [10.x]
-
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Use Node.js ${{ matrix.node-version }}
-  #     uses: actions/setup-node@v1
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #   - run: ls
-  #     working-directory: ./backend
-  #     run: ls
-  #     run: npm ci
-  #     run: npm run build --if-present
-  #     run: npm test
