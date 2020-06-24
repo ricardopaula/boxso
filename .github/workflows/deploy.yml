@@ -25,6 +25,7 @@ jobs:
         password: ${{ secrets.PASSWORD }}
         port: ${{ secrets.PORT }}
         script: |
+          cd /home/boxso/
           ls -R
       # name: remote ssh command
       # on: [push]
