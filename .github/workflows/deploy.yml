@@ -4,9 +4,7 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v1
 
@@ -17,6 +15,25 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.KEY }}
+        passphrase: ${{ secrets.PASSWORD }}
         script: cat /opt/app/README.md
     - name: List files
       run: ls -R
+
+
+      # name: remote ssh command
+      # on: [push]
+      # jobs:
+
+      #   build:
+      #     name: Build
+      #     runs-on: ubuntu-latest
+      #     steps:
+      #     - name: executing remote ssh commands using password
+      #       uses: appleboy/ssh-action@master
+      #       with:
+      #         host: ${{ secrets.HOST }}
+      #         username: ${{ secrets.USERNAME }}
+      #         password: ${{ secrets.PASSWORD }}
+      #         port: ${{ secrets.PORT }}
+      #         script: whoami
