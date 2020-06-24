@@ -52,8 +52,8 @@ module.exports = {
     const orders = await connection('orders')
       .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
       .where('shopkeepers.uuid', uuid)
-      .limit(50)
-      .offset((page - 1) * 50)
+      .limit(20)
+      .offset((page - 1) * 20)
       .select([
         'orders.*'
       ])
