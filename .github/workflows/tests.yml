@@ -18,9 +18,6 @@ jobs:
           postgresql db: boxso_test
           postgresql user: postgres
           postgresql password: postgres
-      - name: Teste de pasta
-        working-directory: ./
-        run: ls
       - name: Install Dependencies
         working-directory: ./backend
         run: npm install

@@ -30,6 +30,7 @@ jobs:
           cd backend/
           npm install
           cd ../frontend/
+      run: ls -R
       # name: remote ssh command
       # on: [push]
       # jobs:
