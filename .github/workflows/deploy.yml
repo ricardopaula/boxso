@@ -26,7 +26,10 @@ jobs:
         port: ${{ secrets.PORT }}
         script: |
           cd /home/boxso/
-          ls -R
+          git pull origin master
+          cd backend/
+          npm install
+          cd ../frontend/
       # name: remote ssh command
       # on: [push]
       # jobs:
