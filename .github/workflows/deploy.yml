@@ -16,7 +16,7 @@ jobs:
         host: ${{ secrets.HOST }}
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
+        KEY: ${{ secrets.KEY }}
         script: cat /opt/app/README.md
     - name: List files
       run: ls -R
