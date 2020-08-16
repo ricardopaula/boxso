@@ -3,6 +3,7 @@ export BOXSO_DB_NAME=''
 export BOXSO_DB_USER=''
 export BOXSO_DB_PASSWORD=''
 export BOXSO_DB_HOST=''
+export BOXSO_SECRET=''
 
 alias wt=''
 export WT_LOCAL_STORAGE_PASSWORD=''

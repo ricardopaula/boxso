@@ -12,12 +12,16 @@ module.exports = {
   async index (request, response) {
     const { page = 1 } = request.query
 
+
+    if(! await shopk.isAdmin(request.uuid))
+      return response.json({error: 'Access denied'})
+
     const [total] = await connection('orders').count()
 
     const orders = await connection('orders')
       .join('shopkeepers', 'shopkeepers.id', '=', 'orders.shopkeeper_id')
-      .limit(5)
-      .offset((page - 1) * 5)
+      .limit(20)
+      .offset((page - 1) * 20)
       .select([
         'orders.*',
         'shopkeepers.fantasyname'

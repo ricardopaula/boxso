@@ -12,11 +12,13 @@
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.2",
+    "bcryptjs": "^2.4.3",
     "bitcoinjs-lib": "^3.3.2",
     "bitcoinjs-message": "^2.0.0",
     "bitcore-lib": "^8.17.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.13",
     "mocha": "^8.0.1",
     "pg": "^7.18.2",
