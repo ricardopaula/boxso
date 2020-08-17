@@ -26,6 +26,8 @@ export default function Profile (){
 
   const history = useHistory();
 
+  const token = localStorage.getItem('token')
+
   async function handleNewShopkeeper(e) {
     e.preventDefault();
 
@@ -48,7 +50,8 @@ export default function Profile (){
     }
 
     try {
-      await api.post('shopkeepers', data)
+      console.log(token)
+      await api.post('shopkeepers', data, { headers: {"Authorization" : `Bearer ${token}`} })
       history.push('/admin');
     } catch (error) {
       alert('Erro ao cadastrar lojista')

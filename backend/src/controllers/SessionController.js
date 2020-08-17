@@ -1,4 +1,6 @@
 const connection = require('../database/connection')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 module.exports = {
 
@@ -11,18 +13,28 @@ module.exports = {
 
     const shopkeeper = await connection('shopkeepers')
       .where('email', email)
-      .where('password', password)
-      .select(['uuid', 'fantasyname', 'admin'])
+      .select(['uuid', 'fantasyname', 'admin', 'password'])
       .first()
 
     if (!shopkeeper) {
+      return response.json({ type: 'USER_NOT_FOUND' })
+    }
+
+    if (! await bcrypt.compare(password, shopkeeper.password)) {
       return response.json({ type: 'INVALID_CREDENTIALS' })
     }
+
+    const token = jwt.sign({ uuid: shopkeeper.uuid }, process.env.BOXSO_SECRET, {
+      expiresIn: 86400,
+    })
+
+
     return response.json({
       type: 'LOGIN_SUCESSFULL',
       uuid: shopkeeper.uuid,
       fantasyname: shopkeeper.fantasyname,
-      admin: shopkeeper.admin
+      admin: shopkeeper.admin,
+      token
     })
   },
 

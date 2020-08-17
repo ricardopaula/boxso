@@ -10,8 +10,10 @@ export default function Admin (){
 
   const history = useHistory();
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
-    api.get('shopkeepers').then(response => {
+    api.get('shopkeepers', { headers: {"Authorization" : `Bearer ${token}`} }).then(response => {
       setShopkeepers(response.data)
     })
   })

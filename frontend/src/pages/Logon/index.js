@@ -23,6 +23,8 @@ export default function Logon() {
         localStorage.setItem('uuid', response.data.uuid);
         localStorage.setItem('fantasyName', response.data.fantasyname);
         localStorage.setItem('admin', response.data.admin);
+        localStorage.setItem('token', response.data.token);
+
 
         if(response.data.admin){
           history.push('/admin');

@@ -12,8 +12,10 @@ export default function Home (){
 
   const history = useHistory();
 
+  const token = localStorage.getItem('token')
+
   useEffect(() => {
-    api.get(`orders/shopkeepers/${uuid}`).then(response => {
+    api.get(`orders/shopkeepers/${uuid}`, { headers: {"Authorization" : `Bearer ${token}`} }).then(response => {
       setSOrders(response.data)
     })
   })
