@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import heroesImg from '../../assets/boxso.png';
+import logoImg from '../../assets/boxso.png';
 
 export default function Logon() {
 
@@ -16,7 +16,7 @@ export default function Logon() {
 
   return (
     <div className="logon-container">
-      <img style={style} src={heroesImg} alt="Boxso"/>
+      <img style={style} src={logoImg} alt="Boxso"/>
     </div>
   )
 }

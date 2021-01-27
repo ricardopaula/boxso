@@ -5,7 +5,7 @@ import api from '../../services/api';
 
 import './styles.css';
 
-import heroesImg from '../../assets/boxso.png';
+import logoImg from '../../assets/boxso.png';
 
 export default function Logon() {
   const [email, setEmail] = useState('');
@@ -60,7 +60,7 @@ export default function Logon() {
         </form>
 
       </section>
-      <img src={heroesImg} alt="Boxso"/>
+      <img src={logoImg} alt="Boxso"/>
     </div>
   )
 }
