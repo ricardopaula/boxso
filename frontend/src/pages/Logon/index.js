@@ -52,6 +52,7 @@ export default function Logon() {
           <input
             placeholder="Senha"
             value={password}
+            type="password"
             onChange={e => setPassword(e.target.value)}
             />
           <button className="button" type="submit">Entrar</button>
