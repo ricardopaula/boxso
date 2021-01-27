@@ -5,7 +5,7 @@ import api from '../../services/api';
 
 import './styles.css';
 
-import heroesImg from '../../assets/boxso.png';
+import logoImg from '../../assets/boxso.png';
 
 export default function Logon() {
   const [email, setEmail] = useState('');
@@ -52,6 +52,7 @@ export default function Logon() {
           <input
             placeholder="Senha"
             value={password}
+            type="password"
             onChange={e => setPassword(e.target.value)}
             />
           <button className="button" type="submit">Entrar</button>
@@ -59,7 +60,7 @@ export default function Logon() {
         </form>
 
       </section>
-      <img src={heroesImg} alt="Boxso"/>
+      <img src={logoImg} alt="Boxso"/>
     </div>
   )
 }
