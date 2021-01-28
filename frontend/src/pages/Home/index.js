@@ -23,7 +23,7 @@ export default function Home (){
 
   function formatDate(date){
     let data = new Date(date);
-    return ( ("0" + data.getDate()).slice(-2) + "/" + ("0" + data.getMonth()).slice(-2) + "/" + data.getFullYear() ) ;
+    return ( ("0" + data.getDate()).slice(-2) + "/" + ("0" + data.getMonth()+1).slice(-2) + "/" + data.getFullYear() ) ;
   }
 
   function formatHour(date){
