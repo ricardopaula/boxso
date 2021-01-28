@@ -87,9 +87,22 @@ export default function Home (){
         rows={rows}
         showSearch={false}
         showColumnVisibilityManager={false}
-        // isPaginated={false}
         enableColumnsReorder={false}
-    />
+        texts={
+          {
+             search: 'Pesquisa:',
+             totalRows: 'Total de linhas:',
+             rows: 'Linhas:',
+             selected: 'Selecionado:',
+             rowsPerPage: 'Linhas por Pag.:',
+             page: 'Pag:',
+             of: 'de',
+             prev: 'Ant',
+             next: 'Prox',
+             columnVisibility: 'Visibilidade'
+          }
+        }
+      />
 
     </div>
   );
