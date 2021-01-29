@@ -1,17 +1,17 @@
 .new-shopkeeper-container {
   width: 100%;
   max-width: 1120px;
-  height: 100vh;
   margin: 0 auto;
+  margin-top: 20px;
 
-  display: grid;
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .new-shopkeeper-container .content {
   width: 100%;
-  padding: 96px;
+  padding: 40px;
   background: #f0f0f5;
   box-shadow: 0 0 100px rgba(0, 0, 0, 0.1);
 
@@ -22,7 +22,6 @@
 
 .new-shopkeeper-container .content section {
   width: 100%;
-  max-width: 380px;
 }
 
 .new-shopkeeper-container .content section h1{
@@ -38,10 +37,23 @@
 
 .new-shopkeeper-container .content form {
   width: 100%;
-  max-width: 450px;
 }
 
 .new-shopkeeper-container .content form input,
 .new-shopkeeper-container .content form textarea {
   margin-top: 8px;
+  margin-left: 8px;
+  max-width: 100%;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.container button {
+  margin-top: 10px;
+  margin-left: 10px;
 }
