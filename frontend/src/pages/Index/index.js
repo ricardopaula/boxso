@@ -4,7 +4,7 @@ import './styles.css';
 import logoImg from '../../assets/boxso.png';
 
 import ReactGA from 'react-ga';
-ReactGA.initialize('G-QT2Y5WF1NG');
+ReactGA.initialize('G-J22JL26WHX');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 export default function Logon() {
