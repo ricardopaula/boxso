@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
+import './styles.css';
 
 import logoImg from '../../assets/boxso.png';
 
 export default function Logon() {
 
-  var style = {
-    textalign: "center",
-    display: "block",
-    justifycontent: "center",
-    alignitems: "center",
-    margin: "auto",
-    width: '50%'
-
-  };
-
   return (
-    <div className="logon-container">
-      <img style={style} src={logoImg} alt="Boxso"/>
+    <div className="">
+
+      <div className="container">
+        <img  src={logoImg} alt="Boxso"/>
+      </div>
+
+      <div className="container">
+        <h1>contato@boxso.com.br</h1>
+      </div>
+
     </div>
   )
 }

@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.container h1{
+  color: #677987;
+  font-family: Arial, Helvetica, sans-serif;
+}
