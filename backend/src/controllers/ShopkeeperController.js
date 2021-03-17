@@ -132,7 +132,7 @@ module.exports = {
     const shopkeeper = await connection('shopkeepers')
       .where('apiid', apiid)
       .where('apikey', apikey)
-      .select(['id','fantasyname'])
+      .select(['id','fantasyname','homolog'])
       .first()
 
     if (!shopkeeper) {

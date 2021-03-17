@@ -5,5 +5,14 @@ module.exports = {
       .replace(/\-\-+/g, '-')	// Substitui multiplos hífens por um único hífen
       .replace(/(^-+|-+$)/, '') // Remove hífens extras do final ou do inicio da string
       .toLowerCase();
+  },
+
+  sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  },
+
+  randomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
+
 }
