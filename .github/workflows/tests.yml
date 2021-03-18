@@ -23,6 +23,7 @@ jobs:
       - name: Running migrations
         working-directory: ./backend
         run: npx knex migrate:latest
+        run: npx knex seed:run
       - name: Run Tests
         working-directory: ./backend
         run: npm test
