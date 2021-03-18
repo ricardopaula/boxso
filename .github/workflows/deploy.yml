@@ -21,6 +21,8 @@ jobs:
           git pull origin master
           cd backend/
           npm install
+          npx knex migrate:latest
+          npx knex seed:run
           cd ../frontend/
           npm install
           pm2 restart Api
