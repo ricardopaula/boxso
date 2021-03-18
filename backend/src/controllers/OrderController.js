@@ -115,8 +115,30 @@ module.exports = {
 
     const shopkeeper_id = shopkeeper.id
     const fantasyname = shopkeeper.fantasyname
+    let error = false
+    let type = ''
+    let btcaddress = ''
+    let btcvalue = 0.0
+    let btccount = 0.0
+    let nonce = ''
 
-    const {error, type, btcaddress, btcvalue, btccount, nonce } = await createOrderInExchange(brlvalue)
+    if(shopkeeper.homolog){
+      error = false
+      type = 'ADDRESS_CREATED'
+      btcaddress = 'bc1'+crypto.randomBytes(10).toString('HEX')
+      btcvalue = 320450.95
+      btccount = 0.00012542
+      nonce = crypto.randomBytes(10).toString('HEX')
+    }else{
+      resp = await createOrderInExchange(brlvalue)
+
+      error = resp.error
+      type = resp.type
+      btcaddress = resp.btcaddress
+      btcvalue = resp.btcvalue
+      btccount = resp.btccount
+      nonce = resp.nonce
+    }
 
     if (error) {
       return response.json({
@@ -152,19 +174,10 @@ module.exports = {
     const apiid = request.headers.apiid
     const apikey = request.headers.apikey
 
-
-    console.log('consultou');
-
-    // return response.json({
-    //   "error": false,
-    //   "type": "VERIFY_STATUS_OK",
-    //   "recived": true
-    // });
-
     const shopkeeper = await connection('shopkeepers')
       .where('apiid', apiid)
       .where('apikey', apikey)
-      .select('id')
+      .select('id', 'homolog')
       .first()
 
     if (!shopkeeper) {
@@ -184,7 +197,20 @@ module.exports = {
     }
 
     let transactionStatus = ''
-    const { error, status, btctx } = await bitcoincore.checkTransaction(order.btcaddress, order.btccount)
+    let error = false
+    let status = true
+    let btctx = ''
+
+    if(shopkeeper.homolog){
+      error = false
+      status = true
+      btctx = crypto.randomBytes(10).toString('HEX')
+
+      ms = helper.randomInteger(5000, 35000)
+      await helper.sleep(ms);
+    }else{
+      { error, status, btctx } await bitcoincore.checkTransaction(order.btcaddress, order.btccount)
+    }
 
     if (error) {
       return response.json({

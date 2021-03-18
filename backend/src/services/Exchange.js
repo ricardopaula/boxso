@@ -1,6 +1,7 @@
 const axios = require('axios')
 const crypto = require('crypto')
 const bitcoincore = require('./BitcoinCore')
+const helper = require('../services/Helper')
 
 const publicKey = process.env.BTC_PUBLIC_KEY;
 const wtUuid = process.env.WT_UUID;
@@ -91,7 +92,7 @@ module.exports = {
 
     do{
       console.log(`Tentativa ${i+1}`)
-      await sleep(1000);
+      await helper.sleep(1000);
 
       try {
         await axios.get(`${url}${nonce}`)
@@ -210,10 +211,6 @@ function buildBTCAmount(btcCount){
   const BTCAmount = Math.round(btcCount * parseFloat(multiplicator))
 
   return `${BTCAmount}/${multiplicator}`
-}
-
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 function getExpiration(){
