@@ -125,7 +125,7 @@ module.exports = {
     if(shopkeeper.homolog){
       error = false
       type = 'ADDRESS_CREATED'
-      btcaddress = 'bc1'+crypto.randomBytes(10).toString('HEX')
+      btcaddress = '3LBm64668oh1LWAmExm5GuhJxAHAzPX5i5'
       btcvalue = 320450.95
       btccount = 0.00012542
       nonce = crypto.randomBytes(10).toString('HEX')
