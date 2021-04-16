@@ -209,7 +209,10 @@ module.exports = {
       ms = helper.randomInteger(5000, 35000)
       await helper.sleep(ms);
     }else{
-      { error, status, btctx } await bitcoincore.checkTransaction(order.btcaddress, order.btccount)
+      const resp = await bitcoincore.checkTransaction(order.btcaddress, order.btccount)
+      error = resp.error
+      status = resp.status
+      btctx = resp.btctx
     }
 
     if (error) {
