@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './styles.css';
 
-import logoImg from '../../assets/boxso.png';
+import logoImg from '../../assets/logo_boxso_transparent.png';
+import funcionamentoImg from '../../assets/boxso_funcionamento.png';
 
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-188433010-1');
@@ -12,8 +13,12 @@ export default function Logon() {
   return (
     <div className="">
 
-      <div className="container">
+      <div className="logo">
         <img  src={logoImg} alt="Boxso"/>
+      </div>
+
+      <div className="image">
+        <img  src={funcionamentoImg} alt="Boxso"/>
       </div>
 
       <div className="container">

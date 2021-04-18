@@ -1,9 +1,20 @@
-.container {
-  display: flex;
-  align-items: center;
-}
 
 .container h1{
   color: #677987;
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.logo img{
+  width: 25%;
+  display: flex;
+  align-items: center;
+  margin-top: 0;
+}
+
+
+.image img{
+  width: 50%;
+  display: flex;
+  align-items: center;
+  margin-top: 0;
 }
